@@ -1,16 +1,30 @@
-mod router;
 mod data;
+mod router;
 
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
+use data::Config;
+use rocket::{fs::NamedFile, fairing::AdHoc, State};
 use std::path::{Path, PathBuf};
-use rocket::fs::NamedFile;
 
 #[get("/<file..>")]
-async fn index(file: PathBuf) -> Option<NamedFile> {
-    NamedFile::open(Path::new("xnas-frontend/dist").join(file)).await.ok()
+async fn static_files(state: &State<Config>, file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new(&state.dist).join(file))
+        .await
+        .ok()
+}
+
+#[get("/")]
+async fn index(state: &State<Config>) -> Option<NamedFile> {
+    NamedFile::open(Path::new(&state.dist).join("index.html"))
+        .await
+        .ok()
 }
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .attach(AdHoc::config::<Config>())
+        .mount("/", routes![index, static_files])
+        .attach(router::stage())
 }
