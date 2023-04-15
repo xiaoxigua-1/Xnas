@@ -1,10 +1,10 @@
 pub mod models;
 pub mod schema;
 
-use diesel::pg::{PgConnection, Pg};
+pub use diesel;
+use diesel::pg::{Pg, PgConnection};
 use diesel::prelude::*;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-pub use diesel;
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 

@@ -1,6 +1,6 @@
 use rocket::{fairing::AdHoc, State};
 
-use crate::data::{WebStatus, Api};
+use crate::data::{Api, WebStatus};
 
 #[get("/first")]
 async fn first<'a>(web_status: &State<WebStatus>) -> Api<'a, bool> {

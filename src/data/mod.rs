@@ -1,12 +1,12 @@
 pub mod login_data;
 
-use std::sync::{Arc, RwLock};
 use std::io::Cursor;
+use std::sync::{Arc, RwLock};
 
-use rocket::request::Request;
-use rocket::response::{self, Response, Responder};
 use rocket::http::{ContentType, Status};
-use rocket::serde::{Deserialize, Serialize, json};
+use rocket::request::Request;
+use rocket::response::{self, Responder, Response};
+use rocket::serde::{json, Deserialize, Serialize};
 use xnas_orm::diesel::pg::PgConnection;
 
 pub type Result<'a, T, E> = std::result::Result<Api<'a, T>, Api<'a, E>>;
@@ -16,13 +16,13 @@ pub type Result<'a, T, E> = std::result::Result<Api<'a, T>, Api<'a, E>>;
 pub struct Config {
     pub db_url: String,
     pub dist: String,
-    pub jwt_secure: String
+    pub jwt_secure: String,
 }
 
 #[derive(Deserialize, Debug)]
 #[serde(crate = "rocket::serde")]
 pub struct WebStatus {
-    pub first: bool
+    pub first: bool,
 }
 
 #[derive(Serialize, Debug)]
@@ -31,7 +31,7 @@ pub struct Api<'a, T> {
     pub message: &'a str,
     pub error: bool,
     pub data: Option<T>,
-    pub status: u16
+    pub status: u16,
 }
 
 pub struct Db {
@@ -56,16 +56,16 @@ impl<'a, T> Api<'a, T> {
             data: Some(data),
             message: "",
             status: 200,
-            error: false
+            error: false,
         }
     }
 
     pub fn custom(data: Option<T>, message: &'a str, status: u16, error: bool) -> Self {
         Self {
             data,
-            message, 
+            message,
             status,
-            error
+            error,
         }
     }
 }

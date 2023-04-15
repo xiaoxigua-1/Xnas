@@ -1,5 +1,5 @@
-use diesel::prelude::*;
 use crate::schema::accounts;
+use diesel::prelude::*;
 
 #[derive(Queryable, Debug)]
 pub struct Accounts {
@@ -7,7 +7,7 @@ pub struct Accounts {
     pub name: String,
     pub email: Option<String>,
     pub password_hash: String,
-    pub admin: bool
+    pub admin: bool,
 }
 
 #[derive(Insertable)]
@@ -16,5 +16,5 @@ pub struct NewAccount {
     pub name: String,
     pub password_hash: String,
     pub email: Option<String>,
-    pub admin: bool
+    pub admin: bool,
 }

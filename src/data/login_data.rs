@@ -1,4 +1,4 @@
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::{Deserialize, Serialize};
 
 #[derive(FromForm)]
 pub struct LoginData {
@@ -11,13 +11,13 @@ pub struct NewAccData {
     pub name: String,
     pub password: String,
     pub email: Option<String>,
-    pub admin: bool
+    pub admin: bool,
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Jwt {
-    token: String
+    token: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -26,7 +26,7 @@ pub struct Claims {
     pub sub: String,
     pub company: String,
     pub exp: usize,
-    pub admin: bool
+    pub admin: bool,
 }
 
 impl Claims {
@@ -35,15 +35,13 @@ impl Claims {
             exp,
             company,
             sub,
-            admin
+            admin,
         }
     }
 }
 
 impl Jwt {
     pub fn new(token: String) -> Self {
-        Self {
-            token
-        }
+        Self { token }
     }
 }
