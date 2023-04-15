@@ -19,7 +19,7 @@ pub struct Config {
     pub jwt_secure: String
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 #[serde(crate = "rocket::serde")]
 pub struct Api<'a, T> {
     pub message: &'a str,

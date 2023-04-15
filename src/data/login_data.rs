@@ -10,7 +10,8 @@ pub struct LoginData {
 pub struct NewAccData {
     pub name: String,
     pub password: String,
-    pub email: Option<String>
+    pub email: Option<String>,
+    pub admin: bool
 }
 
 #[derive(Serialize, Deserialize)]
@@ -22,17 +23,19 @@ pub struct Jwt {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Claims {
-    sub: String,
-    company: String,
-    exp: usize,
+    pub sub: String,
+    pub company: String,
+    pub exp: usize,
+    pub admin: bool
 }
 
 impl Claims {
-    pub fn new(exp: usize, company: String, sub: String) -> Self {
+    pub fn new(exp: usize, company: String, sub: String, admin: bool) -> Self {
         Self {
             exp,
             company,
-            sub
+            sub,
+            admin
         }
     }
 }

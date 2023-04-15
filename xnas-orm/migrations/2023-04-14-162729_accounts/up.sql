@@ -3,5 +3,6 @@ CREATE TABLE accounts (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT,
-  password_hash TEXT NOT NULL 
+  password_hash TEXT NOT NULL,
+  admin BOOLEAN NOT NULL DEFAULT FALSE
 )
