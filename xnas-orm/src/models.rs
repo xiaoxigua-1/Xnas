@@ -1,9 +1,18 @@
 use diesel::prelude::*;
+use crate::schema::accounts;
 
-#[derive(Queryable)]
-pub struct Login {
+#[derive(Queryable, Debug)]
+pub struct Accounts {
     pub id: i32,
     pub name: String,
-    pub email: String,
+    pub email: Option<String>,
     pub password_hash: String,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = accounts)]
+pub struct NewAccount {
+    pub name: String,
+    pub password_hash: String,
+    pub email: Option<String>
 }

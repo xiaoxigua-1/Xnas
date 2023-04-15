@@ -1,8 +1,9 @@
 pub mod models;
 pub mod schema;
 
-pub use diesel::pg::PgConnection;
-pub use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+pub use diesel;
 
 pub fn establish_connection(database_url: &str) -> PgConnection {
     PgConnection::establish(database_url)

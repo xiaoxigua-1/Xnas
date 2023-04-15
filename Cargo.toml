@@ -8,6 +8,8 @@ edition = "2021"
 [dependencies]
 rocket = { version = "=0.5.0-rc.3", features = ["json"] }
 xnas-orm = { path = "./xnas-orm" }
+bcrypt = "0.14"
+jsonwebtoken = "8"
 
 [build-dependencies]
 npm_rs = "1.0.0"

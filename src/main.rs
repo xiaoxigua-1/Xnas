@@ -4,7 +4,7 @@ mod router;
 #[macro_use]
 extern crate rocket;
 use data::Config;
-use rocket::{fs::NamedFile, fairing::AdHoc, State};
+use rocket::{fairing::AdHoc, fs::NamedFile, State};
 use std::path::{Path, PathBuf};
 
 #[get("/<file..>")]

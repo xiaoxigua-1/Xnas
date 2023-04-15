@@ -1,3 +1,4 @@
 [default]
 dist = "xnas-frontend/dist" 
 db_url = "postgres://postgres:password@localhost/postgres"
+jwt_secure = "password"
