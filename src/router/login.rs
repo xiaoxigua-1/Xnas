@@ -35,7 +35,7 @@ impl<'r> FromRequest<'r> for CreateAccToken {
         let can_create = if all.is_empty() {
             true
         } else if let Some(auth_str) = auth_header {
-            let token_info = auth_str.split(" ").collect::<Vec<_>>();
+            let token_info = auth_str.split(' ').collect::<Vec<_>>();
             if token_info.len() == 2 {
                 let token_type = token_info[0];
                 let token_str = token_info[1];
@@ -68,7 +68,7 @@ impl<'r> FromRequest<'r> for CreateAccToken {
 }
 
 #[post("/login", data = "<login_data>")]
-fn login<'a>(
+async fn login<'a>(
     db: &State<Db>,
     config: &State<Config>,
     login_data: Form<LoginData>,
@@ -91,7 +91,7 @@ fn login<'a>(
 }
 
 #[post("/create_new_acc", data = "<new_acc_data>")]
-fn create_new_acc(db: &State<Db>, new_acc_data: Form<NewAccData>, _create: CreateAccToken) {
+async fn create_new_acc(db: &State<Db>, new_acc_data: Form<NewAccData>, _create: CreateAccToken) {
     let new_acc = NewAccount {
         name: new_acc_data.name.clone(),
         password_hash: hash(new_acc_data.password.clone(), DEFAULT_COST).unwrap(),
