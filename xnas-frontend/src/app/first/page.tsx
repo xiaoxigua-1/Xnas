@@ -40,7 +40,7 @@ export default function First() {
     form.append("password", formData.password);
     
     const request = await baseInstance.post<Api<boolean>>("create_new_acc", form);
-    if (request.data.data) {
+    if (!request.data.data) {
       document.location = "/";
     }
   }; 
@@ -54,7 +54,7 @@ export default function First() {
           <Input name="name" placeholder="Name" size="lg" className="mt-5" onChange={handleChange} type="name"/>
           <Input name="password" placeholder="Password" size="lg" className="mt-5" onChange={handleChange} type="password"/>
           <Box className="flex justify-end mt-5 h-10">
-            <Button className="p-5" colorScheme="purple" size="large" onClick={() => { next() }} rightIcon={<AiOutlineArrowRight />}>
+            <Button colorScheme="purple" size="md" onClick={() => { next() }} rightIcon={<AiOutlineArrowRight />}>
               Next 
             </Button>
           </Box>
