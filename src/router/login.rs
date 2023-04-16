@@ -74,7 +74,8 @@ async fn login<'a>(
     login_data: Form<LoginData>,
 ) -> Result<'a, Jwt, String> {
     let Ok(login_acc) = accounts.filter(name.eq(&login_data.name)).first::<Accounts>(&mut *db.connect.write().unwrap()) else {
-        return Err(Api::custom(None, "User not found", 401, true));
+        // User not found
+        return Err(Api::custom(None, "Name or Password error", 401, true));
     };
 
     if verify(login_data.password.clone(), &login_acc.password_hash).unwrap() {
@@ -86,7 +87,8 @@ async fn login<'a>(
 
         Ok(Api::default(Jwt::new(token)))
     } else {
-        Err(Api::custom(None, "password error", 401, true))
+        // Password error
+        Err(Api::custom(None, "Name or Password error", 401, true))
     }
 }
 

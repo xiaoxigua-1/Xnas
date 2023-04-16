@@ -1,14 +1,17 @@
 'use client';
+
 import { NextPage } from 'next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, cache } from 'react';
 import { baseInstance, Api } from './api';
-import { Box, Container, FormLabel, Input, Button } from '@chakra-ui/react';
+import { Box, Container, FormLabel, Input, Button, useToast } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 
 const Home: NextPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     password: ""
   });
+  const toast = useToast();
 
   useEffect(() => {
     (async () => {
@@ -37,13 +40,20 @@ const Home: NextPage = () => {
 
     form.append("name", formData.name);
     form.append("password", formData.password);
-
-    const request = await baseInstance.post<Api<{ token: string }>>("login", form);
-    if (!request.data.error) {
+    try {
+      const request = await baseInstance.post<Api<{ token: string }>>("login", form);
       localStorage.setItem("token", request.data.data.token);
       document.location = "/app";
-    } else {
-      // todo error message
+    } catch (err) {
+      // toast error message
+      const error = err as AxiosError<Api<{ token: string }>>;
+      toast({
+        title: "Login error.",
+        description: error.response?.data.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
@@ -54,7 +64,7 @@ const Home: NextPage = () => {
         <Input name="name" placeholder="Name" size="md" className="mt-5" onChange={handleChange} type="name"/>
         <Input name="password" placeholder="Password" size="md" className="mt-5" onChange={handleChange} type="password"/>
         <Box className="flex justify-end mt-5 h-10">
-          <Button colorScheme="purple" size="md" onClick={() => { login() }} >
+          <Button colorScheme="purple" size="md" onClick={() => { login() }} type="submit">
             Login 
           </Button>
         </Box>
