@@ -1,7 +1,7 @@
 use npm_rs::*;
 
 fn main() {
-    println!("cargo:rerun-if-changed=xnas-forntend/src");
+    println!("cargo:rerun-if-changed=build.rs");
     NpmEnv::default()
         .set_path("xnas-frontend")
         .with_node_env(&NodeEnv::Production)

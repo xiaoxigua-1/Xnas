@@ -5,11 +5,10 @@ mod router;
 extern crate rocket;
 use rocket::{fairing::AdHoc, fs::{FileServer, relative}};
 use xnas_orm::{
-    diesel::RunQueryDsl, establish_connection, models::Accounts, run_migrations,
-    schema::accounts::dsl::*,
+    establish_connection, run_migrations
 };
 
-use data::{Config, Db, WebStatus};
+use data::{Config, Db};
 
 #[launch]
 fn rocket() -> _ {
@@ -21,13 +20,7 @@ fn rocket() -> _ {
             
             run_migrations(&mut pg_connect);
             
-            let first = accounts
-                .load::<Accounts>(&mut pg_connect)
-                .unwrap()
-                .is_empty();
-            let web_status = WebStatus { first };
             rocket
-                .manage(web_status)
                 .manage(Db::new(pg_connect))
                 .mount("/", FileServer::from(relative!("xnas-frontend/dist")))
         }))

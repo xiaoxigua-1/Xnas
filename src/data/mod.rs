@@ -19,12 +19,6 @@ pub struct Config {
     pub jwt_secure: String,
 }
 
-#[derive(Deserialize, Debug)]
-#[serde(crate = "rocket::serde")]
-pub struct WebStatus {
-    pub first: bool,
-}
-
 #[derive(Serialize, Debug)]
 #[serde(crate = "rocket::serde")]
 pub struct Api<'a, T> {

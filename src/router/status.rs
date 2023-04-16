@@ -1,10 +1,11 @@
 use rocket::{fairing::AdHoc, State};
+use xnas_orm::{schema::accounts::dsl::*, diesel::RunQueryDsl, models::Accounts};
 
-use crate::data::{Api, WebStatus};
+use crate::data::{Api, Db};
 
 #[get("/first")]
-async fn first<'a>(web_status: &State<WebStatus>) -> Api<'a, bool> {
-    Api::default(web_status.first)
+async fn first<'a>(db: &State<Db>) -> Api<'a, bool> {
+    Api::default(accounts.load::<Accounts>(&mut *db.connect.write().unwrap()).unwrap().is_empty())
 }
 
 pub fn stage() -> AdHoc {

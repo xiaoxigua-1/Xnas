@@ -1,19 +1,8 @@
 'use client';
 
-import { ThemeProvider, createTheme } from '@mui/material';
+import { CacheProvider } from '@chakra-ui/next-js';
+import { ChakraProvider } from '@chakra-ui/react';
 import './globals.css';
-
-const theme = createTheme({
-  components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          background: '#ffffff'
-        }
-      }
-    }
-  }
-});
 
 export default function RootLayout({
   children,
@@ -23,10 +12,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider theme={theme}>
-          {children}
-        </ThemeProvider>
+        <CacheProvider>
+          <ChakraProvider>
+            {children}
+          </ChakraProvider>
+        </CacheProvider>
       </body>
     </html>
-  )
+  );
 }
