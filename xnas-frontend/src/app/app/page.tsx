@@ -13,7 +13,8 @@ export default function App() {
       height: 300,
       move: false,
       state: WindowState.Normal,
-      title: "123"
+      title: "123",
+      icon: "https://cdn.discordapp.com/avatars/458988300418416640/ae9f6c6cbf1cecdb4e50ead29ebdddf2.png?size=2048&quality=lossless",
     },
     {
       x: 20,
@@ -22,7 +23,8 @@ export default function App() {
       height: 300,
       move: false,
       state: WindowState.Normal,
-      title: "321"
+      title: "123",
+      icon: "https://cdn.discordapp.com/avatars/458988300418416640/ae9f6c6cbf1cecdb4e50ead29ebdddf2.png?size=2048&quality=lossless",
     },
     {
       x: 20,
@@ -31,33 +33,30 @@ export default function App() {
       height: 300,
       move: false,
       state: WindowState.Normal,
-      title: "321"
+      title: "123",
+      icon: "https://cdn.discordapp.com/avatars/458988300418416640/ae9f6c6cbf1cecdb4e50ead29ebdddf2.png?size=2048&quality=lossless",
     },
   ]);
   const [windowIndex, setWindowIndex] = useState<number[]>(windows.map((_, i) => i));
 
   const moveStart = (event: React.MouseEvent<HTMLDivElement>) => (index: number) => {
     const windowsClone = [...windows];
-    const windowIndexClone = [...windowIndex];
     const item = windowsClone[index];
 
     item.move = true;
-    item.clickX = event.clientX - item.x;
+    item.clickPos = [event.clientX - item.x, event.clientY - item.y];
 
-    windowIndexClone.splice(windowIndex.indexOf(index), 1);
-    windowIndexClone.splice(0, 0, index);
-
-    setWindowIndex(windowIndexClone);
     setWindows(windowsClone);
   };
+
 
   const move = (event: React.MouseEvent<HTMLDivElement>) => {
     const windowsClone = [...windows];
   
     windowsClone.map(w => {
       if (w.move && w.state == WindowState.Normal) {
-        w.x = event.clientX - (w.clickX ?? (w.width / 2));
-        w.y = event.clientY - 10;
+        w.x = event.clientX - w.clickPos!![0];
+        w.y = event.clientY - w.clickPos!![1];
       }
 
       return w;
@@ -71,11 +70,41 @@ export default function App() {
     
     windowsClone.map(w => {
       w.move = false;
+      w.resize = null;
       return w;
     })
 
     setWindows(windowsClone);
-  }
+  };
+
+  const onFocus = (index: number) => {
+    const windowIndexClone = [...windowIndex];
+    
+    windowIndexClone.splice(windowIndex.indexOf(index), 1);
+    windowIndexClone.splice(0, 0, index);
+
+    setWindowIndex(windowIndexClone);
+  };
+
+  const onClose = (index: number) => {
+      const windowsClone = [...windows];
+
+      windowsClone.splice(index, 1);
+      setWindows(windowsClone);
+  };
+
+  const onMaximize = (index: number) => {
+      const windowsClone = [...windows];
+      const state = windowsClone[index].state;
+
+      windowsClone[index].state = state == WindowState.Normal ? WindowState.Maximize : WindowState.Normal;
+
+      setWindows(windowsClone);
+  };
+
+  const onMinimize = (index: number) => {
+    const windowsClone = [...windows];
+  };
 
   return (
     <Box 
@@ -91,22 +120,10 @@ export default function App() {
           onMouseDown={(event) => {
             moveStart(event)(index);
           }}
-          onClose={() => {
-            const windowsClone = [...windows];
-            windowsClone.splice(index, 1);
-            setWindows(windowsClone);
-          }}
-          onMaximize={() => {
-            const windowsClone = [...windows];
-            const state = windowsClone[index].state;
-
-            windowsClone[index].state = state == WindowState.Normal ? WindowState.Maximize : WindowState.Normal;
-
-            setWindows(windowsClone);
-          }}
-          onMinimize={() => {
-            const windowsClone = [...windows];
-          }}
+          onFocus={() => { onFocus(index); }}
+          onClose={() => { onClose(index); }}
+          onMaximize={() => { onMaximize(index); }}
+          onMinimize={() => { onMinimize(index); }}
         /> 
       ))} 
     </Box>

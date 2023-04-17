@@ -1,12 +1,22 @@
-import { Avatar, Box, HStack, Text } from "@chakra-ui/react";
+import { Box, HStack, Image, Text } from "@chakra-ui/react";
 import { AiOutlineClose, AiOutlineBorder, AiOutlineLine } from "react-icons/ai";
-import { BsXCircleFill } from "react-icons/bs";
 import { NextPage } from "next";
 
 export enum WindowState {
   Normal,
   Maximize,
-  Mininize
+  Mininize,
+}
+
+export enum ResizeState {
+  Top,
+  RightTop,
+  Right,
+  RightBottom,
+  Bottom,
+  Left,
+  LeftTop,
+  LeftBottom
 }
 
 export interface WindowType extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,14 +27,16 @@ export interface WindowType extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   icon: string;
   move: boolean;
-  clickX?: number;
-  state: WindowState
+  clickPos?: number[];
+  state: WindowState;
+  resize?: ResizeState | null;
 }
 
 export interface WindowFun {
   onClose: () => void;
   onMinimize: () => void;
   onMaximize: () => void;
+  onFocus: () => void;
 }
 
 const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
@@ -33,6 +45,7 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
   x,
   y,
   move,
+  resize,
   state,
   title,
   icon,
@@ -41,10 +54,11 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
   onClose,
   onMaximize,
   onMinimize,
+  onFocus,
   ...props
 }) => {
-  const top = state == WindowState.Normal ? y : state == WindowState.Maximize ? 0 : 0;
-  const left = state == WindowState.Normal ? x : state == WindowState.Maximize ? 0 : 0;
+  const top = state == WindowState.Normal ? y : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? window.innerWidth : 0;
+  const left = state == WindowState.Normal ? x : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? window.innerHeight : 0;
 
   return (
     <Box 
@@ -57,6 +71,7 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
         zIndex
       }}
       {...props}
+      onMouseDown={onFocus}
     >
       <HStack 
         justify="end"
@@ -64,11 +79,11 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
         className="border-b-gray-400 border-b-[1px] p-1"
         onMouseDown={onMouseDown}
       >
-        <HStack className="flex-1">
-          <Avatar size="xs" src={icon} background=""/>
+        <HStack className="flex-1 select-none ">
+          <Image boxSize={6} borderRadius="full" src={icon} draggable={false} alt="app icon" />
           <Text>{title}</Text>
         </HStack>
-        <AiOutlineLine />
+        <AiOutlineLine onClick={onMinimize}/>
         <AiOutlineBorder onClick={onMaximize} />
         <AiOutlineClose onClick={onClose} />
       </HStack>
