@@ -1,5 +1,6 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Avatar, Box, HStack, Text } from "@chakra-ui/react";
 import { AiOutlineClose, AiOutlineBorder, AiOutlineLine } from "react-icons/ai";
+import { BsXCircleFill } from "react-icons/bs";
 import { NextPage } from "next";
 
 export enum WindowState {
@@ -14,6 +15,7 @@ export interface WindowType extends React.HTMLAttributes<HTMLDivElement> {
   x: number;
   y: number;
   title: string;
+  icon: string;
   move: boolean;
   clickX?: number;
   state: WindowState
@@ -33,6 +35,7 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
   move,
   state,
   title,
+  icon,
   zIndex,
   onMouseDown,
   onClose,
@@ -61,11 +64,14 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
         className="border-b-gray-400 border-b-[1px] p-1"
         onMouseDown={onMouseDown}
       >
+        <HStack className="flex-1">
+          <Avatar size="xs" src={icon} background=""/>
+          <Text>{title}</Text>
+        </HStack>
         <AiOutlineLine />
         <AiOutlineBorder onClick={onMaximize} />
         <AiOutlineClose onClick={onClose} />
       </HStack>
-      <Box>{title}</Box>
     </Box>
   );
 };

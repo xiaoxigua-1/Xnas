@@ -87,7 +87,7 @@ export default function App() {
         <Window
           {...window}
           key={index}
-          zIndex={windows.length - windowIndex[index]}
+          zIndex={windows.length - windowIndex.indexOf(index)}
           onMouseDown={(event) => {
             moveStart(event)(index);
           }}
