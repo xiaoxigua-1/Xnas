@@ -66,8 +66,11 @@ export default function App() {
           case ResizeState.LeftBottom:
           case ResizeState.LeftTop:
           case ResizeState.Left: {
-            w.x = event.clientX;
-            w.width -= event.movementX;
+            if (w.width > 300 || (w.width <= 300 && event.movementX < 0 && event.clientX < w.x)) {
+              w.x += event.movementX;
+              w.width -= event.movementX;
+            } 
+            break;
           }
         }
 
@@ -75,8 +78,10 @@ export default function App() {
           case ResizeState.LeftTop:
           case ResizeState.RightTop:
           case ResizeState.Top: {
-            w.y = event.clientY;
-            w.height -= event.movementY;
+            if (w.height > 300 || (w.height <= 300 && event.movementY < 0 && event.clientY < w.y)) {
+              w.y += event.movementY;
+              w.height -= event.movementY;
+            }
             break;
           }
         }
@@ -85,7 +90,9 @@ export default function App() {
           case ResizeState.LeftBottom:
           case ResizeState.RightBottom:
           case ResizeState.Bottom: {
-            w.height += event.movementY;
+            if (w.height > 300 || (w.height <= 300 && event.movementY > 0 && event.clientY > w.y + w.height)) {
+              w.height += event.movementY;
+            }
             break;
           }
         }
@@ -94,7 +101,9 @@ export default function App() {
           case ResizeState.RightTop:
           case ResizeState.RightBottom:
           case ResizeState.Right: {
-            w.width += event.movementX;
+            if (w.width > 300 || (w.width <= 300 && event.movementX > 0 && event.clientX > w.x + w.width)) {
+              w.width += event.movementX;
+            }
             break;
           }
         }
@@ -198,8 +207,8 @@ export default function App() {
           {...window}
           key={index}
           zIndex={windows.length - windowIndex.indexOf(index)}
-          onMoveStart={(event) => {
-            moveStart(event)(index);
+          onMoveStart={() => {
+            moveStart()(index);
           }}
           onFocus={() => { onFocus(index); }}
           onClose={() => { onClose(index); }}
