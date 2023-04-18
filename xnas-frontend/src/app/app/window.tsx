@@ -118,9 +118,9 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
           <Image boxSize={6} borderRadius="full" src={icon} draggable={false} alt="app icon" />
           <Text>{title}</Text>
         </HStack>
-        <AiOutlineLine onClick={onMinimize}/>
-        <AiOutlineBorder onClick={onMaximize} />
-        <AiOutlineClose onClick={onClose} />
+        <AiOutlineLine onClick={onMinimize} onMouseEnter={() => setResize(null)} className="cursor-pointer" />
+        <AiOutlineBorder onClick={onMaximize} onMouseEnter={() => setResize(null)} className="cursor-pointer" />
+        <AiOutlineClose onClick={onClose} onMouseEnter={() => setResize(null)} className="cursor-pointer" />
       </HStack>
     </Box>
   );

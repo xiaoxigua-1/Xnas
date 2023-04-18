@@ -62,7 +62,6 @@ export default function App() {
         w.x += event.movementX;
         w.y += event.movementY;
       } else if (w.state == WindowState.Resize) {
-        console.log(w.resize)
         switch(w.resize) {
           case ResizeState.LeftBottom:
           case ResizeState.LeftTop:
@@ -143,8 +142,6 @@ export default function App() {
     windowsClone[index].state = state == WindowState.Normal ? WindowState.Maximize : WindowState.Normal;
 
     setWindows(windowsClone);
-
-    console.log(state);
   };
 
   const onMinimize = (index: number) => {
