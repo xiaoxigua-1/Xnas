@@ -61,8 +61,8 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
   setResize,
   ...props
 }) => {
-  const top = state == WindowState.Normal || state == WindowState.Resize ? y : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? window.innerWidth : 0;
-  const left = state == WindowState.Normal || state == WindowState.Resize ? x : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? window.innerHeight : 0;
+  const top = state == WindowState.Normal || state == WindowState.Resize ? y : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? 0 : 0;
+  const left = state == WindowState.Normal || state == WindowState.Resize ? x : state == WindowState.Maximize ? 0 : state == WindowState.Mininize ? 0 : 0;
 
   const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     let windowX = event.clientX - left;
@@ -95,8 +95,8 @@ const Window: NextPage<WindowType & { zIndex: number } & WindowFun> = ({
     <Box 
       className={`absolute bg-white shadow-2xl rounded-md ${move || state == WindowState.Resize ? "" : "transition-maximize"}`}
       style={{
-        width: state == WindowState.Normal || state == WindowState.Resize ? width : window.innerWidth,
-        height: state == WindowState.Normal || state == WindowState.Resize ? height : window.innerHeight,
+        width: state == WindowState.Normal || state == WindowState.Resize ? width : state == WindowState.Mininize ? 0 : window.innerWidth,
+        height: state == WindowState.Normal || state == WindowState.Resize ? height : state == WindowState.Mininize ? 0 : window.innerHeight,
         top,
         left,
         zIndex

@@ -3,6 +3,7 @@
 import { Box } from "@chakra-ui/react";
 import Window, { ResizeState, WindowState, WindowType } from "./window";
 import React, { useState } from "react";
+import Dock from "./dock";
 
 export default function App() {
   const [windows, setWindows] = useState<WindowType[]>([
@@ -155,12 +156,17 @@ export default function App() {
 
   const onMinimize = (index: number) => {
     const windowsClone = [...windows];
+    const item = windowsClone[index];
+    item.state = item.state == WindowState.Mininize ? WindowState.Normal : WindowState.Mininize;
+
+    setWindowResize(null);
+    setWindows(windowsClone);
   };
 
   const setResize = (index: number) => (state: ResizeState | null) => {
     const windowsClone = [...windows];
     const item = windowsClone[index];
-    if (item.state == WindowState.Normal) {
+    if (item.state == WindowState.Normal && !windows.find(i => i.state == WindowState.Resize)) {
       item.resize = state;
       setWindowResize(state);
       setWindows(windowsClone);
@@ -202,6 +208,7 @@ export default function App() {
       onMouseMove={move}
       onMouseUp={moveEnd} 
     >
+      <Dock windows={windows} onMinimize={onMinimize}/>
       {windows.map((window, index) => (
         <Window
           {...window}
