@@ -1,14 +1,19 @@
+pub mod call;
+pub mod parser;
+
 use pyo3::prelude::*;
 
-/// Formats the sum of two numbers as string.
-#[pyfunction]
-fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
-    Ok((a + b).to_string())
+type XnasResult<T> = Result<T, XnasAppError>;
+
+#[derive(Debug)]
+pub enum XnasAppError {
+    CommandError,
+    NotFoundMain,
+    PyError(PyErr),
 }
 
-/// A Python module implemented in Rust.
 #[pymodule]
-fn Xnas_lib(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
+fn xnas_py_lib(_py: Python<'_>, foo_module: &PyModule) -> PyResult<()> {
+
     Ok(())
 }

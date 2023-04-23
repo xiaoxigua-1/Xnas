@@ -1,12 +1,13 @@
 [package]
-name = "Xnas-lib"
+name = "xnas-lib"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "Xnas_lib"
+name = "xnas_lib"
 crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.18.1"
+walkdir = "2"
