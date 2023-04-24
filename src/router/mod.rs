@@ -1,4 +1,5 @@
 mod login;
+mod auth;
 mod status;
 
 use rocket::fairing::AdHoc;
@@ -8,5 +9,6 @@ pub fn stage() -> AdHoc {
         rocket
             .attach(login::stage())
             .attach(status::stage())
+            .attach(auth::stage())
     })
 }

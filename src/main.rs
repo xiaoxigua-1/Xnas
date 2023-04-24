@@ -1,5 +1,6 @@
 mod data;
 mod router;
+mod util;
 
 #[macro_use]
 extern crate rocket;
