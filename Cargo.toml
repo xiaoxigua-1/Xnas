@@ -11,6 +11,10 @@ xnas-orm = { path = "./xnas-orm" }
 bcrypt = "0.14"
 jsonwebtoken = "8"
 xnas-lib = { path = "./xnas-lib" }
+flate2 = "1.0.25"
+tar = "0.4.38"
+reqwest = { version = "0.11", features = ["json", "stream"] }
+futures-util = "0.3"
 
 [build-dependencies]
 npm_rs = "1.0.0"

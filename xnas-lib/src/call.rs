@@ -2,7 +2,7 @@ use std::{ffi::OsStr, fs, path::PathBuf};
 
 use pyo3::{
     types::{PyModule, PyTuple},
-    PyResult, Python, IntoPy, Py,
+    IntoPy, Py, PyResult, Python,
 };
 use walkdir::WalkDir;
 
@@ -47,18 +47,12 @@ impl<T: IntoPy<Py<PyTuple>> + Clone> XnasCommand<T> {
                         let path = format!("{}", py_file.display());
                         let code = fs::read_to_string(path.clone()).unwrap();
 
-                        PyModule::from_code(
-                            py,
-                            &code,
-                            module_name,
-                            module_name,
-                        )?;
+                        PyModule::from_code(py, &code, module_name, module_name)?;
                     }
                 }
 
                 let code = fs::read_to_string(main_file.to_str().unwrap()).unwrap();
-                let app =
-                    PyModule::from_code(py, &code, "", "")?.getattr(self.fun.as_str())?;
+                let app = PyModule::from_code(py, &code, "", "")?.getattr(self.fun.as_str())?;
 
                 app.call1(self.args.clone())?.extract()
             });

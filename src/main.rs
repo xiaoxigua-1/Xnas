@@ -4,10 +4,11 @@ mod util;
 
 #[macro_use]
 extern crate rocket;
-use rocket::{fairing::AdHoc, fs::{FileServer, relative}};
-use xnas_orm::{
-    establish_connection, run_migrations
+use rocket::{
+    fairing::AdHoc,
+    fs::{relative, FileServer},
 };
+use xnas_orm::{establish_connection, run_migrations};
 
 use data::{Config, Db};
 
@@ -18,9 +19,9 @@ fn rocket() -> _ {
         .attach(AdHoc::on_ignite("init", |rocket| async move {
             let config = rocket.state::<Config>().unwrap();
             let mut pg_connect = establish_connection(&config.db_url);
-            
+
             run_migrations(&mut pg_connect);
-            
+
             rocket
                 .manage(Db::new(pg_connect))
                 .mount("/", FileServer::from(relative!("xnas-frontend/dist")))

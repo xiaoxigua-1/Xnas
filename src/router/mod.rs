@@ -1,5 +1,5 @@
-mod login;
 mod auth;
+mod login;
 mod status;
 
 use rocket::fairing::AdHoc;

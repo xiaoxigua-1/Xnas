@@ -1,5 +1,5 @@
-pub mod login_data;
 pub mod apps;
+pub mod login_data;
 
 use std::io::Cursor;
 use std::sync::{Arc, RwLock};

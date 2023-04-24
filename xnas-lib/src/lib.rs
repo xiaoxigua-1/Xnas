@@ -14,6 +14,5 @@ pub enum XnasAppError {
 
 #[pymodule]
 fn xnas_py_lib(_py: Python<'_>, foo_module: &PyModule) -> PyResult<()> {
-
     Ok(())
 }

@@ -1,7 +1,7 @@
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::{Deserialize, Serialize};
 
 pub struct Apps {
-    apps: Vec<AppInfo>
+    apps: Vec<AppInfo>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -13,5 +13,5 @@ pub struct AppInfo {
 
 #[derive(FromForm)]
 pub struct Install {
-    url: String
+    url: String,
 }

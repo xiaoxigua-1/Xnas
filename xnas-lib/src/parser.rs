@@ -1,4 +1,4 @@
-use pyo3::{Py, types::PyTuple, IntoPy};
+use pyo3::{types::PyTuple, IntoPy, Py};
 
 use crate::{XnasAppError, XnasResult};
 
@@ -6,12 +6,13 @@ use crate::{XnasAppError, XnasResult};
 pub struct XnasCommand<T> {
     pub app: String,
     pub(crate) fun: String,
-    pub(crate) args: T
+    pub(crate) args: T,
 }
 
 /// command example `app:init(arg, arg1, arg2)`
-pub fn parser<T>(command: String, args: T) -> XnasResult<XnasCommand<T>> 
-    where T: IntoPy<Py<PyTuple>> + Clone
+pub fn parser<T>(command: String, args: T) -> XnasResult<XnasCommand<T>>
+where
+    T: IntoPy<Py<PyTuple>> + Clone,
 {
     let command: Vec<&str> = command.split(':').collect();
 

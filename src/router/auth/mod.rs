@@ -1,11 +1,12 @@
 mod apps;
-mod data;
 
-use rocket::{fairing::AdHoc,
+use jsonwebtoken::{decode, DecodingKey, Validation};
+use rocket::{
+    fairing::AdHoc,
+    http::Status,
+    request::{FromRequest, Outcome, Request},
     State,
-    request::{FromRequest, Outcome, Request}, http::Status,
 };
-use jsonwebtoken::{decode, Validation, DecodingKey};
 
 use crate::data::login_data::Claims;
 use crate::Config;
@@ -48,8 +49,6 @@ impl<'r> FromRequest<'r> for Auth {
 
 pub fn stage() -> AdHoc {
     AdHoc::on_ignite("load auth stage", |rocket| async {
-        rocket
-            .attach(apps::stage())
+        rocket.attach(apps::stage())
     })
 }
-
