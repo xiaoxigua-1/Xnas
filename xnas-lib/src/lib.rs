@@ -1,6 +1,7 @@
 pub mod call;
 pub mod parser;
 
+pub use pyo3;
 use pyo3::prelude::*;
 
 type XnasResult<T> = Result<T, XnasAppError>;
