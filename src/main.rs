@@ -8,9 +8,11 @@ use rocket::{
     fairing::AdHoc,
     fs::{relative, FileServer},
 };
-use xnas_orm::{establish_connection, run_migrations};
+use xnas_orm::{
+    diesel::RunQueryDsl, establish_connection, models::App, run_migrations, schema::apps::dsl::*,
+};
 
-use data::{Config, Db};
+use data::{apps::{AppInfo, Apps}, Config, Db};
 
 #[launch]
 fn rocket() -> _ {
@@ -22,8 +24,21 @@ fn rocket() -> _ {
 
             run_migrations(&mut pg_connect);
 
+            let apps_info = apps
+                .load::<App>(&mut pg_connect)
+                .unwrap()
+                .iter()
+                .map(|app| AppInfo {
+                    id: app.id,
+                    name: app.name.clone(),
+                    path: app.path.clone(),
+                    enable: app.enable,
+                    description: app.description.clone(),
+                }).collect::<Vec<_>>();
+
             rocket
                 .manage(Db::new(pg_connect))
+                .manage(Apps { apps: apps_info })
                 .mount("/", FileServer::from(relative!("xnas-frontend/dist")))
         }))
         .attach(router::stage())

@@ -11,12 +11,13 @@ diesel::table! {
 }
 
 diesel::table! {
-    app (id) {
+    apps (id) {
         id -> Int4,
         name -> Text,
+        description -> Text,
         enable -> Bool,
         path -> Text,
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(accounts, app,);
+diesel::allow_tables_to_appear_in_same_query!(accounts, apps,);

@@ -13,12 +13,11 @@ pub fn value_to_object(val: &Value, py: Python<'_>) -> PyObject {
         Value::Array(v) => {
             let inner: Vec<_> = v.iter().map(|x| value_to_object(x, py)).collect();
             inner.to_object(py)
-        },
+        }
         Value::Object(m) => {
-            let inner: HashMap<_, _> =
-                m.iter().map(|(k, v)| (k, value_to_object(v, py))).collect();
+            let inner: HashMap<_, _> = m.iter().map(|(k, v)| (k, value_to_object(v, py))).collect();
             inner.to_object(py)
-        },
-        Value::Null => py.None()
+        }
+        Value::Null => py.None(),
     }
 }

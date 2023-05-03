@@ -18,3 +18,12 @@ pub struct NewAccount {
     pub email: Option<String>,
     pub admin: bool,
 }
+
+#[derive(Queryable, PartialEq, Debug)]
+pub struct App {
+    pub id: i32,
+    pub name: String,
+    pub description: String,
+    pub enable: bool,
+    pub path: String,
+}
