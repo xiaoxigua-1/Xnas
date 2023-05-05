@@ -8,6 +8,7 @@ use rocket::{
     http::Status,
     serde::json::{self, Value},
     Data, Request, State,
+    response::status::NotFound
 };
 use xnas_lib::{
     parser::parser,
@@ -15,7 +16,7 @@ use xnas_lib::{
 };
 
 use crate::{
-    data::{apps::Install, Db},
+    data::{apps::{Install, Apps}, Db},
     util::struct_to_py_object::value_to_object,
 };
 
@@ -55,13 +56,18 @@ impl IntoPy<PyObject> for Args {
 }
 
 #[post("/install", data = "<data>")]
-async fn install(auth: Auth, data: Form<Install>, db: &State<Db>) {}
+async fn install(_auth: Auth, data: Form<Install>, db: &State<Db>) {
+
+}
 
 #[get("/<command>", data = "<args>", format = "json")]
-async fn call(_auth: Auth, command: String, args: Args) {
+async fn call(_auth: Auth, command: String, args: Args, apps: &State<Apps>) -> Result<Option<String>, NotFound<String>> {
     let command = parser(command, (args,)).unwrap();
-    let path = PathBuf::from(format!("./apps/{}", command.app));
-    command.run(path).unwrap();
+    if let Some(app) =  apps.apps.iter().find(|app| { app.name == command.app }) {
+        Ok(command.run(PathBuf::from(&app.path)).unwrap())
+    } else {
+        Err(NotFound(format!("app `{}` not found", command.app)))
+    }
 }
 
 pub fn stage() -> AdHoc {
